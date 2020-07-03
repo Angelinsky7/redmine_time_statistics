@@ -1,0 +1,35 @@
+<div class="autoscroll">
+  <table class="list odd-even time-entries" id="time-statistics-report">
+    <thead>
+      <tr>
+        <th class="checkbox hide-when-print">
+          <%= check_box_tag 'check_all', '', false, :class => 'toggle-selection', :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+        </th>
+        <% @query.inline_columns.each do |column| %>
+          <%= column_header(@query, column) %>
+        <% end %>
+        <th></th>
+        <% columns_width = (40 / (@report.users.length+1)).to_i %>
+        <% @report.users.each do |user| %>
+          <th class="user" style="width:<%= columns_width %>%;"><%= user[:name] %></th>
+        <% end %>
+        <th class="total" style="width:<%= columns_width %>%;"><%= l(:label_total_time) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => 'report_item', :locals => {:entries => @report.time_statistics} %>
+      <tr class="total">
+        <td></td>
+        <% columns_lenght = @query.inline_columns.length %>
+        <td class="text-left" colspan="<%= columns_lenght %>"><%= l(:label_total_time) %></td>
+        <td></td>
+        <% total_total = 0 %>
+        <% @report.users.each do |user| %>
+          <% total_by_user = sum_hours(select_hours_by_user(@report, user)); total_total += total_by_user %>
+          <td><%= html_hours(format_hours(total_by_user)) if total_by_user >= 0 %></td>
+        <% end %>
+        <td><%= html_hours(format_hours(total_total)) if total_total >= 0 %></th>
+      </tr>
+    </tbody>
+  </table>
+</div>

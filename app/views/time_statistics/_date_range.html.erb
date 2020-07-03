@@ -1,0 +1,8 @@
+<%= render :partial => 'queries/query_form' %>
+
+<div class="tabs hide-when-print">
+  <% query_params = request.query_parameters %>
+  <ul>
+    <li><%= link_to(l(:label_details), _time_statistics_path(@project, nil, :params => query_params), :class => (action_name == 'index' ? 'selected' : nil)) %></li>
+  </ul>
+</div>

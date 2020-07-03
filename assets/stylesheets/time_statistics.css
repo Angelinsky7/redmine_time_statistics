@@ -1,0 +1,9 @@
+table#time-statistics-report tbody tr.total {
+    font-weight: bold;
+    background-color: #EEEEEE;
+    border-top: 1px solid #e4e4e4;
+}
+
+.text-left {
+    text-align: left !important;
+}
