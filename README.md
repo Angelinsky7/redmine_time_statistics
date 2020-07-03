@@ -13,6 +13,7 @@ A plugin for redmine to calculate the percentage of the parent based on the numb
 # Compatibility:
 
 * Redmine up to 4.x
+* For redmine before 4.x you must patch lib/redmine/subclass_factory.rb to have that 4.1 branch version of it (https://www.redmine.org/projects/redmine/repository/entry/branches/4.1-stable/lib/redmine/subclass_factory.rb#L34)
 
 --------------------------------------------------------------------------------
 
