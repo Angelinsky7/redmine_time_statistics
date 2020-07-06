@@ -28,7 +28,11 @@ module RedmineTimeStatistics
         @time_statistics = @scope.collect {|x| TimeStatistics.new(x)}
         TimeStatistics.load_visible_user_total_spent_hours(@time_statistics, sql_query_filter)
 
-        load_visible_user_that_spent_hours(@time_statistics)
+        if @query.show_only_issue_with_spent_time
+          @time_statistics = TimeStatistics.remove_issue_without_spent_time(@time_statistics)
+        end if
+
+        load_visible_user_that_spent_hours(@time_statistics)        
       end
 
       def load_visible_user_that_spent_hours(time_statistics, user=User.current)

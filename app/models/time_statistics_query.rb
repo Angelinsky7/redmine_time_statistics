@@ -1,5 +1,9 @@
 class TimeStatisticsQuery < IssueQuery
 
+  self.available_columns = IssueQuery.available_columns + [
+    QueryColumn.new(:show_all_issue, :caption => :label_show_all_issue, :inline => false)
+  ]
+
   def initialize(attributes=nil, *args)
     super attributes
     self.filters = { 
@@ -27,6 +31,10 @@ class TimeStatisticsQuery < IssueQuery
     unless filter.nil?
       sql_for_field("time.time_spent_on", filter[:operator], filter[:values], TimeEntry.table_name, "spent_on", false)
     end
+  end
+
+  def show_only_issue_with_spent_time
+    !has_column?(:show_all_issue)
   end
 
 end

@@ -1,5 +1,6 @@
 # French strings go here for Rails i18n
 fr:
-  :label_time_statistics: "Statistiques de Temps"
+  :label_time_statistics: "Statistiques de temps"
   :field_time: "Temps passés"
   :label_time: "Date"
+  :label_show_all_issue: "Voir les demandes sans temps passés"

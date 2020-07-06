@@ -10,6 +10,8 @@ Redmine::Plugin.register :redmine_time_statistics do
 
   project_module :redmine_time_statistics do
     permission :view_time_statistics, :time_statistics => :index
+
+    menu :application_menu, :time_statistics, { :controller => 'time_statistics', :action => 'index' }, :caption => :label_time_statistics
     menu :project_menu, :time_statistics, { :controller => 'time_statistics', :action => 'index' }, :caption => :label_time_statistics, :param => :project_id
   end
  

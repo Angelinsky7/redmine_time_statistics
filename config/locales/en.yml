@@ -1,5 +1,6 @@
 # English strings go here for Rails i18n
 en:
-  :label_time_statistics: "Time Statistics"
+  :label_time_statistics: "Time statistics"
   :field_time: "Time spent"
   :label_time: "Date"
+  :label_show_all_issue: "Show issue without spent time"

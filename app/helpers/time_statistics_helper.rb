@@ -12,6 +12,40 @@ module TimeStatisticsHelper
     report.time_statistics.collect{ |x| (x.total_user_spent_hours[:users].nil? ? 0 : x.total_user_spent_hours[:users].select{|k,v| k == user[:id]}.collect{|k, v| v.to_f}) }.flatten
   end
 
+  def link_to_if_with_spent_time(condition, label, issue, query, user_id = nil)
+    spent_on_filter = query.filters["time.time_spent_on"]
+
+    if user_id.nil?
+      if spent_on_filter.nil?
+        link_to_if(condition, label, project_time_entries_path(issue.project, :issue_id => "~#{issue.id}"))
+      else
+        f = [:issue_id, :spent_on]
+        link_to_if(condition, label, project_time_entries_path(issue.project, 
+          "f" => f, 
+          "op[issue_id]" => "~",
+          "v[issue_id]" => ["#{issue.id}"],
+          "op[spent_on]" => "#{spent_on_filter[:operator]}", 
+          "v[spent_on]" => spent_on_filter[:values]
+        ))
+      end
+    else
+      if spent_on_filter.nil?
+        link_to_if(condition, label, project_time_entries_path(issue.project, :issue_id => "~#{issue.id}", :user_id => "#{user_id}"))
+      else
+        f = [:issue_id, :user_id, :spent_on]
+        link_to_if(condition, label, project_time_entries_path(issue.project, 
+          "f" => f, 
+          "op[issue_id]" => "~",
+          "v[issue_id]" => ["#{issue.id}"],
+          "op[user_id]" => "=",
+          "v[user_id]" => ["#{user_id}"],
+          "op[spent_on]" => "#{spent_on_filter[:operator]}", 
+          "v[spent_on]" => spent_on_filter[:values]
+        ))
+      end
+    end
+  end
+
   def sum_hours(hours)
     sum = 0
     hours.each do |row|

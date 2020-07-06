@@ -2,7 +2,9 @@ class TimeStatisticsController < ApplicationController
       
   menu_item :time_statistics
 
-  before_filter :find_project, :authorize, :only => :index
+  before_filter :authorize, :except => :index
+  before_action :find_optional_project, :only => [:index]
+  before_action :authorize_global, :only => [:index]
   
   accept_rss_auth :index
   accept_api_auth :index
@@ -48,10 +50,6 @@ class TimeStatisticsController < ApplicationController
 
   def retrieve_time_statistics_query
     retrieve_query(TimeStatisticsQuery, false)
-  end
-
-  def find_project
-      @project = Project.find(params[:project_id])
   end
           
 end  

@@ -23,9 +23,13 @@
     <% @report.users.each do |user| %>
       <% user_id = user[:id]%>
       <% hours = ((entry.total_user_spent_hours[:users].nil? ? 0 : entry.total_user_spent_hours[:users][user_id]) || 0) %>
-      <td class="user" style="width:<%= columns_width %>%;"><%= html_hours(format_hours(hours)) if hours >= 0 %></td>
+      <td class="user" style="width:<%= columns_width %>%;">
+        <%= link_to_if_with_spent_time(hours > 0, html_hours(format_hours(hours)), entry.issue, @query, user_id) %>
+      </td>
     <% end %>
     <% total_hours = ((entry.total_user_spent_hours[:total]) || 0) %>
-    <td style="width:<%= columns_width %>%;"><%= html_hours(format_hours(total_hours)) if total_hours >= 0 %></td>
+    <td style="width:<%= columns_width %>%;">
+      <%= link_to_if_with_spent_time(total_hours > 0, html_hours(format_hours(total_hours)), entry.issue, @query) %>
+    </td>
   </tr>
 <% end %>   

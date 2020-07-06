@@ -54,4 +54,9 @@ class TimeStatistics
       end
     end
   end 
+
+  def self.remove_issue_without_spent_time(time_statistics)
+    time_statistics.select{|x| (x.total_user_spent_hours[:total] || 0) > 0}
+  end
+
 end
