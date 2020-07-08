@@ -6,7 +6,11 @@ module RedmineTimeStatistics
       base.class_eval do
 
         def redirect_to_time_statistics_query(options)
-          redirect_to project_time_statistics_path(@project, nil, options)
+          if @project.nil?
+            redirect_to time_statistics_path(options)
+          else
+            redirect_to project_time_statistics_path(@project, nil, options)
+          end
         end
 
       end
