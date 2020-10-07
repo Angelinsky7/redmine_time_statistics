@@ -1,0 +1,8 @@
+<h2><%= l(:label_time_statistics) %></h2>
+
+//CONTENT
+
+<% content_for :header_tags do %>
+    <%= auto_discovery_link_tag(:atom, {:query_id => @query, :format => 'atom', :page => nil, :key => User.current.rss_key}, :title => l(:label_time_statistics)) %>
+    <%= stylesheet_link_tag 'time_statistics', plugin: 'redmine_time_statistics' %>
+<% end %>

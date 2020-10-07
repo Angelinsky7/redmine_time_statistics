@@ -44,6 +44,14 @@ class TimeStatisticsController < ApplicationController
     render_404
   end 
 
+  def update_entries
+    respond_to do |format|
+      format.html { render :layout => !request.xhr? }
+    end
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
   def time_statistics_scope(options={})
     @query.issues(options)
   end
