@@ -46,6 +46,65 @@ module TimeStatisticsHelper
     end
   end
 
+  def link_total_with_spent_time(condition, label, query, project, user_id = nil)
+    spent_on_filter = query.filters["time.time_spent_on"]
+
+    if project.nil?
+      if user_id.nil?
+        if spent_on_filter.nil?
+          link_to_if(condition, label, time_entries_path())
+        else
+          f = [:spent_on]
+          link_to_if(condition, label, time_entries_path(
+            "f" => f, 
+            "op[spent_on]" => "#{spent_on_filter[:operator]}", 
+            "v[spent_on]" => spent_on_filter[:values]
+          ))
+        end
+      else
+        if spent_on_filter.nil?
+          link_to_if(condition, label, time_entries_path(:user_id => "#{user_id}"))
+        else
+          f = [:user_id, :spent_on]
+          link_to_if(condition, label, time_entries_path( 
+            "f" => f, 
+            "op[user_id]" => "=",
+            "v[user_id]" => ["#{user_id}"],
+            "op[spent_on]" => "#{spent_on_filter[:operator]}", 
+            "v[spent_on]" => spent_on_filter[:values]
+          ))
+        end
+      end
+    else
+      if user_id.nil?
+        if spent_on_filter.nil?
+          link_to_if(condition, label, project_time_entries_path(project))
+        else
+          f = [:spent_on]
+          link_to_if(condition, label, project_time_entries_path(project, 
+            "f" => f, 
+            "op[spent_on]" => "#{spent_on_filter[:operator]}", 
+            "v[spent_on]" => spent_on_filter[:values]
+          ))
+        end
+      else
+        if spent_on_filter.nil?
+          link_to_if(condition, label, project_time_entries_path(project, :user_id => "#{user_id}"))
+        else
+          f = [:user_id, :spent_on]
+          link_to_if(condition, label, project_time_entries_path(project,  
+            "f" => f, 
+            "op[user_id]" => "=",
+            "v[user_id]" => ["#{user_id}"],
+            "op[spent_on]" => "#{spent_on_filter[:operator]}", 
+            "v[spent_on]" => spent_on_filter[:values]
+          ))
+        end
+      end
+    end
+
+  end
+
   def sum_hours(hours)
     sum = 0
     hours.each do |row|

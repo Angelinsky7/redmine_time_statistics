@@ -25,10 +25,11 @@
         <td></td>
         <% total_total = 0 %>
         <% @report.users.each do |user| %>
+          <% user_id = user[:id]%>
           <% total_by_user = sum_hours(select_hours_by_user(@report, user)); total_total += total_by_user %>
-          <td><%= html_hours(format_hours(total_by_user)) if total_by_user >= 0 %></td>
+          <td><%= link_total_with_spent_time(total_by_user > 0, html_hours(format_hours(total_by_user)), @query, @project, user_id) %></td>
         <% end %>
-        <td><%= html_hours(format_hours(total_total)) if total_total >= 0 %></th>
+        <td><%= link_total_with_spent_time(total_total >= 0, html_hours(format_hours(total_total)), @query, @project) %></td>
       </tr>
     </tbody>
   </table>
