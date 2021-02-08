@@ -43,6 +43,7 @@ module RedmineTimeStatistics
             where("parent.id IN (?)", time_statistics.collect{|x| x.issue.id}).
             distinct("#{TimeEntry.table_name}.user_id")
         
+          # TODO(demarco): We should make this an option in the settings
           status_ids = [1]
           @users = User.where("id IN (?) AND status IN (?)", user_ids.map(&:user_id), status_ids.map(&:to_s)).collect{|x| {:id => x.id, :login => x.login, :name => x.name } }
         end
