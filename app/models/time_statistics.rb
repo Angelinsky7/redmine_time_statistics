@@ -29,12 +29,13 @@ class TimeStatistics
     @total_user_spent_hours
   end
 
-  def self.load_visible_user_total_spent_hours(time_statistics, sql_for_time_spent_on_where, user=User.current)
+  # TODO(demarco): You must add time_activity here
+  def self.load_visible_user_total_spent_hours(time_statistics, sql_for_time_spent_on_where, sql_for_time_activity_where, user=User.current)
     if time_statistics.any?
       hours_by_issue_and_users = TimeEntry.visible(user).
         joins(:issue).
         joins("JOIN #{Issue.table_name} parent ON parent.root_id = #{Issue.table_name}.root_id AND parent.lft <= #{Issue.table_name}.lft AND parent.rgt >= #{Issue.table_name}.rgt").
-        where("parent.id IN (?) #{sql_for_time_spent_on_where.blank? ? "" : "AND #{sql_for_time_spent_on_where}"}", time_statistics.collect{|x| x.issue.id}).
+        where("parent.id IN (?) #{sql_for_time_spent_on_where.blank? ? "" : "AND #{sql_for_time_spent_on_where}"} #{sql_for_time_activity_where.blank? ? "" : "AND #{sql_for_time_activity_where}"}", time_statistics.collect{|x| x.issue.id}).
         group(["parent.id", "#{TimeEntry.table_name}.user_id"]).
         sum(:hours) 
 

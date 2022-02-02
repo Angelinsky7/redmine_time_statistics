@@ -3,4 +3,5 @@ fr:
   :label_time_statistics: "Statistiques de temps"
   :field_time: "Temps passés"
   :label_time: "Date"
+  :label_activity: "Activité"
   :label_show_all_issue: "Voir les demandes sans temps passés"

@@ -24,9 +24,10 @@ module RedmineTimeStatistics
 
       def run
         sql_query_filter = @query.sql_for_time_time_spent_on_where(@query.filters["time.time_spent_on"])
-
+        sql_second_query_filter = @query.sql_for_time_time_activity_where(@query.filters["time.time_activity"])
+        
         @time_statistics = @scope.collect {|x| TimeStatistics.new(x)}
-        TimeStatistics.load_visible_user_total_spent_hours(@time_statistics, sql_query_filter)
+        TimeStatistics.load_visible_user_total_spent_hours(@time_statistics, sql_query_filter, sql_second_query_filter)
 
         if @query.show_only_issue_with_spent_time
           @time_statistics = TimeStatistics.remove_issue_without_spent_time(@time_statistics)

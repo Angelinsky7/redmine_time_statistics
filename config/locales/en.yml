@@ -3,4 +3,5 @@ en:
   :label_time_statistics: "Time statistics"
   :field_time: "Time spent"
   :label_time: "Date"
+  :label_activity: "Activity"
   :label_show_all_issue: "Show issue without spent time"

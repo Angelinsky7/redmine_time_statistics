@@ -4,7 +4,7 @@ Redmine::Plugin.register :redmine_time_statistics do
   name 'Parent Time'
   author 'Angelinsky7'
   description 'Parent time from children'
-  version '0.0.1'
+  version '0.0.2'
   url 'https://github.com/Angelinsky7/redmine_time_statistics.git'
   author_url 'https://github.com/Angelinsky7/redmine_time_statistics.git'
 
