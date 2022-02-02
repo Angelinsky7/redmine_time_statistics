@@ -77,7 +77,7 @@ module TimeStatisticsHelper
           args.merge!({ "op[activity_id]" => "#{time_activity_filter[:operator]}" })  unless time_activity_filter.nil?
           args.merge!({ "v[activity_id]" => time_activity_filter[:values] })          unless time_activity_filter.nil?
 
-          link_to_if(condition, label, time_entries_path(*args))
+          link_to_if(condition, label, time_entries_path(args))
         end
       else
         if spent_on_filter.nil? && time_activity_filter.nil?
