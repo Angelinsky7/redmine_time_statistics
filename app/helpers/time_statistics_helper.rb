@@ -14,95 +14,125 @@ module TimeStatisticsHelper
 
   def link_to_if_with_spent_time(condition, label, issue, query, user_id = nil)
     spent_on_filter = query.filters["time.time_spent_on"]
-    # TODO(demarco): You must add time_activity here
     time_activity_filter = query.filters["time.time_activity"]
 
     if user_id.nil?
-      if spent_on_filter.nil?
+      if spent_on_filter.nil? && time_activity_filter.nil?
         link_to_if(condition, label, project_time_entries_path(issue.project, :issue_id => "~#{issue.id}"))
       else
-        f = [:issue_id, :spent_on]
-        link_to_if(condition, label, project_time_entries_path(issue.project, 
+        f = [:issue_id]
+        f << :spent_on unless spent_on_filter.nil?
+        f << :activity_id unless time_activity_filter.nil?
+        args = {
           "f" => f, 
           "op[issue_id]" => "~",
-          "v[issue_id]" => ["#{issue.id}"],
-          "op[spent_on]" => "#{spent_on_filter[:operator]}", 
-          "v[spent_on]" => spent_on_filter[:values]
-        ))
+          "v[issue_id]" => ["#{issue.id}"]
+        }
+        args.merge!({ "op[spent_on]" => "#{spent_on_filter[:operator]}" })          unless spent_on_filter.nil?
+        args.merge!({ "v[spent_on]" => spent_on_filter[:values] })                  unless spent_on_filter.nil?
+        args.merge!({ "op[activity_id]" => "#{time_activity_filter[:operator]}" })  unless time_activity_filter.nil?
+        args.merge!({ "v[activity_id]" => time_activity_filter[:values] })          unless time_activity_filter.nil?
+       
+        link_to_if(condition, label, project_time_entries_path(issue.project, args));
       end
     else
-      if spent_on_filter.nil?
+      if spent_on_filter.nil? && time_activity_filter.nil?
         link_to_if(condition, label, project_time_entries_path(issue.project, :issue_id => "~#{issue.id}", :user_id => "#{user_id}"))
       else
-        f = [:issue_id, :user_id, :spent_on]
-        link_to_if(condition, label, project_time_entries_path(issue.project, 
+        f = [:issue_id, :user_id]
+        f << :spent_on unless spent_on_filter.nil?
+        f << :activity_id unless time_activity_filter.nil?
+        args = {
           "f" => f, 
           "op[issue_id]" => "~",
           "v[issue_id]" => ["#{issue.id}"],
           "op[user_id]" => "=",
           "v[user_id]" => ["#{user_id}"],
-          "op[spent_on]" => "#{spent_on_filter[:operator]}", 
-          "v[spent_on]" => spent_on_filter[:values]
-        ))
+        }
+        args.merge!({ "op[spent_on]" => "#{spent_on_filter[:operator]}" })          unless spent_on_filter.nil?
+        args.merge!({ "v[spent_on]" => spent_on_filter[:values] })                  unless spent_on_filter.nil?
+        args.merge!({ "op[activity_id]" => "#{time_activity_filter[:operator]}" })  unless time_activity_filter.nil?
+        args.merge!({ "v[activity_id]" => time_activity_filter[:values] })          unless time_activity_filter.nil?
+
+        link_to_if(condition, label, project_time_entries_path(issue.project, args))
       end
     end
   end
 
   def link_total_with_spent_time(condition, label, query, project, user_id = nil)
     spent_on_filter = query.filters["time.time_spent_on"]
-    # TODO(demarco): You must add time_activity here
     time_activity_filter = query.filters["time.time_activity"]
 
     if project.nil?
       if user_id.nil?
-        if spent_on_filter.nil?
+        if spent_on_filter.nil? && time_activity_filter.nil?
           link_to_if(condition, label, time_entries_path())
         else
-          f = [:spent_on]
-          link_to_if(condition, label, time_entries_path(
-            "f" => f, 
-            "op[spent_on]" => "#{spent_on_filter[:operator]}", 
-            "v[spent_on]" => spent_on_filter[:values]
-          ))
+          f = []
+          f << :spent_on unless spent_on_filter.nil?
+          f << :activity_id unless time_activity_filter.nil?
+          args = {"f" => f}
+          args.merge!({ "op[spent_on]" => "#{spent_on_filter[:operator]}" })          unless spent_on_filter.nil?
+          args.merge!({ "v[spent_on]" => spent_on_filter[:values] })                  unless spent_on_filter.nil?
+          args.merge!({ "op[activity_id]" => "#{time_activity_filter[:operator]}" })  unless time_activity_filter.nil?
+          args.merge!({ "v[activity_id]" => time_activity_filter[:values] })          unless time_activity_filter.nil?
+
+          link_to_if(condition, label, time_entries_path(*args))
         end
       else
-        if spent_on_filter.nil?
+        if spent_on_filter.nil? && time_activity_filter.nil?
           link_to_if(condition, label, time_entries_path(:user_id => "#{user_id}"))
         else
-          f = [:user_id, :spent_on]
-          link_to_if(condition, label, time_entries_path( 
+          f = [:user_id]
+          f << :spent_on unless spent_on_filter.nil?
+          f << :activity_id unless time_activity_filter.nil?
+          args = {
             "f" => f, 
             "op[user_id]" => "=",
-            "v[user_id]" => ["#{user_id}"],
-            "op[spent_on]" => "#{spent_on_filter[:operator]}", 
-            "v[spent_on]" => spent_on_filter[:values]
-          ))
+            "v[user_id]" => ["#{user_id}"]
+          }
+          args.merge!({ "op[spent_on]" => "#{spent_on_filter[:operator]}" })          unless spent_on_filter.nil?
+          args.merge!({ "v[spent_on]" => spent_on_filter[:values] })                  unless spent_on_filter.nil?
+          args.merge!({ "op[activity_id]" => "#{time_activity_filter[:operator]}" })  unless time_activity_filter.nil?
+          args.merge!({ "v[activity_id]" => time_activity_filter[:values] })          unless time_activity_filter.nil?
+
+          link_to_if(condition, label, time_entries_path(args))
         end
       end
     else
       if user_id.nil?
-        if spent_on_filter.nil?
+        if spent_on_filter.nil? && time_activity_filter.nil?
           link_to_if(condition, label, project_time_entries_path(project))
         else
-          f = [:spent_on]
-          link_to_if(condition, label, project_time_entries_path(project, 
-            "f" => f, 
-            "op[spent_on]" => "#{spent_on_filter[:operator]}", 
-            "v[spent_on]" => spent_on_filter[:values]
-          ))
+          f = []
+          f << :spent_on unless spent_on_filter.nil?
+          f << :activity_id unless time_activity_filter.nil?
+          args = {"f" => f}
+          args.merge!({ "op[spent_on]" => "#{spent_on_filter[:operator]}" })          unless spent_on_filter.nil?
+          args.merge!({ "v[spent_on]" => spent_on_filter[:values] })                  unless spent_on_filter.nil?
+          args.merge!({ "op[activity_id]" => "#{time_activity_filter[:operator]}" })  unless time_activity_filter.nil?
+          args.merge!({ "v[activity_id]" => time_activity_filter[:values] })          unless time_activity_filter.nil?
+
+          link_to_if(condition, label, project_time_entries_path(project, args))
         end
       else
-        if spent_on_filter.nil?
+        if spent_on_filter.nil? && time_activity_filter.nil?
           link_to_if(condition, label, project_time_entries_path(project, :user_id => "#{user_id}"))
         else
-          f = [:user_id, :spent_on]
-          link_to_if(condition, label, project_time_entries_path(project,  
+          f = [:user_id]
+          f << :spent_on unless spent_on_filter.nil?
+          f << :activity_id unless time_activity_filter.nil?
+          args = {
             "f" => f, 
             "op[user_id]" => "=",
-            "v[user_id]" => ["#{user_id}"],
-            "op[spent_on]" => "#{spent_on_filter[:operator]}", 
-            "v[spent_on]" => spent_on_filter[:values]
-          ))
+            "v[user_id]" => ["#{user_id}"]
+          }
+          args.merge!({ "op[spent_on]" => "#{spent_on_filter[:operator]}" })          unless spent_on_filter.nil?
+          args.merge!({ "v[spent_on]" => spent_on_filter[:values] })                  unless spent_on_filter.nil?
+          args.merge!({ "op[activity_id]" => "#{time_activity_filter[:operator]}" })  unless time_activity_filter.nil?
+          args.merge!({ "v[activity_id]" => time_activity_filter[:values] })          unless time_activity_filter.nil?
+
+          link_to_if(condition, label, project_time_entries_path(project,  args))
         end
       end
     end
